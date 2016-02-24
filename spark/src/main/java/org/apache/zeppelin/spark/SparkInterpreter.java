@@ -28,6 +28,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
 
+import com.gigaspaces.spark.context.GigaSpacesConfig;
+import com.gigaspaces.spark.context.GigaSpacesSparkContext;
 import com.google.common.base.Joiner;
 
 import org.apache.spark.HttpServer;
@@ -102,12 +104,17 @@ public class SparkInterpreter extends Interpreter {
                 "Total number of cores to use. Empty value uses all available core.")
             .add("zeppelin.spark.useHiveContext",
                 getSystemDefault("ZEPPELIN_SPARK_USEHIVECONTEXT",
-                    "zeppelin.spark.useHiveContext", "true"),
+                    "zeppelin.spark.useHiveContext", "false"),
                 "Use HiveContext instead of SQLContext if it is true.")
             .add("zeppelin.spark.maxResult",
                 getSystemDefault("ZEPPELIN_SPARK_MAXRESULT", "zeppelin.spark.maxResult", "1000"),
                 "Max number of SparkSQL result to display.")
-            .add("args", "", "spark commandline args").build());
+            .add("args", "", "spark commandline args")
+
+                .add("gigaspaces.spaceUrl", "jini://*/*/spark-space", "GigaSpaces DataGrid url")
+                .add("gigaspaces.group", "spark", "GigaSpaces DataGrid group")
+                .add("gigaspaces.locator", "localhost:4174", "GigaSpaces DataGrid locator")
+                .build());
 
   }
 
@@ -126,6 +133,7 @@ public class SparkInterpreter extends Interpreter {
   private SparkEnv env;
   private SparkVersion sparkVersion;
 
+  private GigaSpacesConfig gsConfig;
 
   public SparkInterpreter(Properties property) {
     super(property);
@@ -140,6 +148,7 @@ public class SparkInterpreter extends Interpreter {
     sparkListener = setupListeners(this.sc);
   }
 
+
   public synchronized SparkContext getSparkContext() {
     if (sc == null) {
       sc = createSparkContext();
@@ -147,6 +156,22 @@ public class SparkInterpreter extends Interpreter {
       sparkListener = setupListeners(sc);
     }
     return sc;
+  }
+
+  public GigaSpacesConfig getGsConfig() {
+    if (gsConfig == null) {
+        String spaceUrl = getProperty("gigaspaces.spaceUrl");
+        String locatorStr = getProperty("gigaspaces.locator");
+        String groupStr = getProperty("gigaspaces.group");
+
+      gsConfig = new GigaSpacesConfig(
+              spaceUrl,
+              scala.Option.apply(groupStr),
+              scala.Option.apply(locatorStr),
+              1000,
+              1000);
+    }
+    return gsConfig;
   }
 
   public boolean isSparkContextInitialized() {
@@ -215,7 +240,12 @@ public class SparkInterpreter extends Interpreter {
           sqlc = new SQLContext(getSparkContext());
         }
       } else {
-        sqlc = new SQLContext(getSparkContext());
+        SparkContext sc = getSparkContext();
+        GigaSpacesConfig gsConfig = getGsConfig();
+        GigaSpacesSparkContext gsSparkContext =
+                com.gigaspaces.spark.implicits.gigaSpacesSparkContext(sc, gsConfig);
+        sqlc = gsSparkContext.gridSqlContext();
+//        sqlc = new SQLContext(getSparkContext());
       }
     }
 
@@ -484,12 +514,15 @@ public class SparkInterpreter extends Interpreter {
     z = new ZeppelinContext(sc, sqlc, null, dep, printStream,
         Integer.parseInt(getProperty("zeppelin.spark.maxResult")));
 
+    gsConfig = getGsConfig();
+
     intp.interpret("@transient var _binder = new java.util.HashMap[String, Object]()");
     binder = (Map<String, Object>) getValue("_binder");
     binder.put("sc", sc);
     binder.put("sqlc", sqlc);
     binder.put("z", z);
     binder.put("out", printStream);
+    binder.put("gsConfig", gsConfig);
 
     intp.interpret("@transient val z = "
                  + "_binder.get(\"z\").asInstanceOf[org.apache.zeppelin.spark.ZeppelinContext]");
@@ -500,6 +533,11 @@ public class SparkInterpreter extends Interpreter {
     intp.interpret("@transient val sqlContext = "
                  + "_binder.get(\"sqlc\").asInstanceOf[org.apache.spark.sql.SQLContext]");
     intp.interpret("import org.apache.spark.SparkContext._");
+
+    intp.interpret("import com.gigaspaces.spark.implicits._");
+    intp.interpret("import com.gigaspaces.spark.context.GigaSpacesConfig");
+    intp.interpret("@transient implicit val gsConfig = "
+            + "_binder.get(\"gsConfig\").asInstanceOf[com.gigaspaces.spark.context.GigaSpacesConfig]");
 
     if (sparkVersion.oldSqlContextImplicits()) {
       intp.interpret("import sqlContext._");

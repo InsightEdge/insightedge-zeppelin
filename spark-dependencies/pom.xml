@@ -34,6 +34,19 @@
   <description>Zeppelin spark support</description>
   <url>http://zeppelin.incubator.apache.org</url>
 
+  <repositories>
+    <repository>
+      <id>org.openspaces</id>
+      <url>http://maven-repository.openspaces.org</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>org.openspaces</id>
+      <url>http://maven-repository.openspaces.org</url>
+    </pluginRepository>
+  </pluginRepositories>
+
 
   <properties>
     <spark.version>1.4.1</spark.version>
@@ -52,6 +65,9 @@
 
     <spark.download.url>http://archive.apache.org/dist/spark/spark-${spark.version}/spark-${spark.version}.tgz</spark.download.url>
     <py4j.version>0.8.2.1</py4j.version>
+
+    <gigaspaces-spark.version>0.2.0-SNAPSHOT</gigaspaces-spark.version>
+    <gigaspaces-xap.version>10.2.0-13800-RELEASE</gigaspaces-xap.version>
   </properties>
 
   <dependencyManagement>
@@ -337,6 +353,22 @@
           <artifactId>akka-actor_${scala.binary.version}</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.gigaspaces</groupId>
+      <artifactId>gigaspaces-spark</artifactId>
+      <version>${gigaspaces-spark.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.gigaspaces</groupId>
+      <artifactId>gs-runtime</artifactId>
+      <version>${gigaspaces-xap.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.gigaspaces</groupId>
+      <artifactId>gs-openspaces</artifactId>
+      <version>${gigaspaces-xap.version}</version>
     </dependency>
 
   </dependencies>

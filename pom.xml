@@ -88,9 +88,9 @@
     <module>zeppelin-zengine</module>
     <module>spark-dependencies</module>
     <module>spark</module>
+    <module>markdown</module>
     <!-- TODO: temporarily disabling to speed up build process -->
 <!--
-    <module>markdown</module>
     <module>angular</module>
     <module>shell</module>
     <module>hive</module>

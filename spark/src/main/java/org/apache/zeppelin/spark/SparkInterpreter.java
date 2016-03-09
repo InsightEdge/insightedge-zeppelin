@@ -111,7 +111,7 @@ public class SparkInterpreter extends Interpreter {
                 "Max number of SparkSQL result to display.")
             .add("args", "", "spark commandline args")
 
-                .add("gigaspaces.spaceUrl", "jini://*/*/spark-space", "GigaSpaces DataGrid url")
+                .add("gigaspaces.spaceName", "spark-space", "GigaSpaces DataGrid Space name")
                 .add("gigaspaces.group", "spark", "GigaSpaces DataGrid group")
                 .add("gigaspaces.locator", "localhost:4174", "GigaSpaces DataGrid locator")
                 .build());
@@ -160,12 +160,12 @@ public class SparkInterpreter extends Interpreter {
 
   public GigaSpacesConfig getGsConfig() {
     if (gsConfig == null) {
-        String spaceUrl = getProperty("gigaspaces.spaceUrl");
+        String spaceName = getProperty("gigaspaces.spaceName");
         String locatorStr = getProperty("gigaspaces.locator");
         String groupStr = getProperty("gigaspaces.group");
 
       gsConfig = new GigaSpacesConfig(
-              spaceUrl,
+              spaceName,
               scala.Option.apply(groupStr),
               scala.Option.apply(locatorStr),
               1000,

@@ -40,7 +40,7 @@
     <scala.binary.version>2.10</scala.binary.version>
     <hadoop.version>2.3.0</hadoop.version>
     <py4j.version>0.8.2.1</py4j.version>
-    <gigaspaces-spark.version>0.2.0-SNAPSHOT</gigaspaces-spark.version>
+    <gigaspaces-spark.version>0.3.0-SNAPSHOT</gigaspaces-spark.version>
   </properties>
 
   <profiles>

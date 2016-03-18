@@ -167,9 +167,7 @@ public class SparkInterpreter extends Interpreter {
       gsConfig = new GigaSpacesConfig(
               spaceName,
               scala.Option.apply(groupStr),
-              scala.Option.apply(locatorStr),
-              1000,
-              1000);
+              scala.Option.apply(locatorStr));
     }
     return gsConfig;
   }
@@ -243,7 +241,7 @@ public class SparkInterpreter extends Interpreter {
         SparkContext sc = getSparkContext();
         GigaSpacesConfig gsConfig = getGsConfig();
         GigaSpacesSparkContext gsSparkContext =
-                com.gigaspaces.spark.implicits.gigaSpacesSparkContext(sc, gsConfig);
+                com.gigaspaces.spark.implicits.gigaSpacesSparkContext(sc);
         sqlc = gsSparkContext.gridSqlContext();
 //        sqlc = new SQLContext(getSparkContext());
       }
@@ -311,6 +309,9 @@ public class SparkInterpreter extends Interpreter {
             .setMaster(getProperty("master"))
             .setAppName(getProperty("spark.app.name"))
             .set("spark.repl.class.uri", classServerUri);
+
+    // set GigaSpaces config
+    new com.gigaspaces.spark.implicits.SparkConfExtension(conf).setGigaSpaceConfig(getGsConfig());
 
     if (jars.length > 0) {
       conf.setJars(jars);

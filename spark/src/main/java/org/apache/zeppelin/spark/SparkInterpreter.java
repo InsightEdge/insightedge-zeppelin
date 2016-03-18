@@ -111,8 +111,8 @@ public class SparkInterpreter extends Interpreter {
                 "Max number of SparkSQL result to display.")
             .add("args", "", "spark commandline args")
 
-                .add("gigaspaces.spaceName", "spark-space", "GigaSpaces DataGrid Space name")
-                .add("gigaspaces.group", "spark", "GigaSpaces DataGrid group")
+                .add("gigaspaces.spaceName", "insightedge-space", "GigaSpaces DataGrid Space name")
+                .add("gigaspaces.group", "insightedge", "GigaSpaces DataGrid group")
                 .add("gigaspaces.locator", "localhost:4174", "GigaSpaces DataGrid locator")
                 .add("spark.externalBlockStore.blockManager", "org.apache.spark.storage.GigaSpacesBlockManager", "GigaSpaces Off-Heap Storage Manager")
                 .build());

@@ -94,7 +94,7 @@ public class SparkInterpreter extends Interpreter {
         new InterpreterPropertyBuilder()
             .add("spark.app.name", "Zeppelin", "The name of spark application.")
             .add("master",
-                getSystemDefault("MASTER", "spark.master", "local[*]"),
+                getSystemDefault("MASTER", "spark.master", "spark://127.0.0.1:7077"),
                 "Spark master uri. ex) spark://masterhost:7077")
             .add("spark.executor.memory",
                 getSystemDefault(null, "spark.executor.memory", "512m"),

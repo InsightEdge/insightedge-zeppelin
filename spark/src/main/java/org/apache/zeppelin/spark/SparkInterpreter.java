@@ -113,7 +113,7 @@ public class SparkInterpreter extends Interpreter {
 
                 .add("gigaspaces.spaceName", "insightedge-space", "GigaSpaces DataGrid Space name")
                 .add("gigaspaces.group", "insightedge", "GigaSpaces DataGrid group")
-                .add("gigaspaces.locator", "localhost:4174", "GigaSpaces DataGrid locator")
+                .add("gigaspaces.locator", "127.0.0.1:4174", "GigaSpaces DataGrid locator")
                 .add("spark.externalBlockStore.blockManager", "org.apache.spark.storage.GigaSpacesBlockManager", "GigaSpaces Off-Heap Storage Manager")
                 .build());
 

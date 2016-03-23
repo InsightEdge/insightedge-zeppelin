@@ -67,7 +67,6 @@
     <py4j.version>0.8.2.1</py4j.version>
 
     <insightedge.version>0.3.0-SNAPSHOT</insightedge.version>
-    <gigaspaces-xap.version>10.2.0-13800-RELEASE</gigaspaces-xap.version>
   </properties>
 
   <dependencyManagement>
@@ -359,16 +358,6 @@
       <groupId>com.gigaspaces.insightedge</groupId>
       <artifactId>insightedge-core</artifactId>
       <version>${insightedge.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.gigaspaces</groupId>
-      <artifactId>gs-runtime</artifactId>
-      <version>${gigaspaces-xap.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.gigaspaces</groupId>
-      <artifactId>gs-openspaces</artifactId>
-      <version>${gigaspaces-xap.version}</version>
     </dependency>
 
   </dependencies>

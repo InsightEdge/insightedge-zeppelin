@@ -40,7 +40,7 @@
     <scala.binary.version>2.10</scala.binary.version>
     <hadoop.version>2.3.0</hadoop.version>
     <py4j.version>0.8.2.1</py4j.version>
-    <insightedge.version>0.3.0-SNAPSHOT</insightedge.version>
+    <insightedge.version>0.4.0-SNAPSHOT</insightedge.version>
   </properties>
 
   <profiles>

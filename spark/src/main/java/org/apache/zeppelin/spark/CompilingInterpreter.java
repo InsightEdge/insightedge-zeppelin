@@ -27,6 +27,12 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * Allows to append custom code to spark job. Uses %dep interpreter, so must be called before %spark is initialized.
+ * Compiles code written by user, packs it into .jar and adds the jar to %dep interpreter.
+ *
+ * @author Leonid_Poliakov
+ */
 public class CompilingInterpreter extends Interpreter {
     static {
         Interpreter.register(

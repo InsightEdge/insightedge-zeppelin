@@ -537,6 +537,7 @@ public class SparkInterpreter extends Interpreter {
     intp.interpret("import org.apache.spark.SparkContext._");
 
     intp.interpret("import com.gigaspaces.spark.implicits._");
+    intp.interpret("import org.apache.spark.sql.insightedge._");
     intp.interpret("import com.gigaspaces.spark.context.GigaSpacesConfig");
     intp.interpret("@transient implicit val gsConfig = "
             + "_binder.get(\"gsConfig\").asInstanceOf[com.gigaspaces.spark.context.GigaSpacesConfig]");

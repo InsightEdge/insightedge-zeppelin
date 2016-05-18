@@ -1,0 +1,1 @@
+sh "mvn clean install -DskipTests -P spark-1.6 -P build-distr"

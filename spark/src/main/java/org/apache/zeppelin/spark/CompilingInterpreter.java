@@ -19,6 +19,7 @@ package org.apache.zeppelin.spark;
 
 import com.gigaspaces.spark.utils.StringCompiler;
 import org.apache.zeppelin.interpreter.*;
+import org.apache.zeppelin.scheduler.Scheduler;
 import scala.collection.Iterator;
 
 import java.io.File;
@@ -122,5 +123,16 @@ public class CompilingInterpreter extends Interpreter {
             lazy.open();
         }
         return dep;
+    }
+
+    @Override
+    public Scheduler getScheduler() {
+        // reuse Spark scheduler to make sure %def jobs are run sequentially with %spark ones
+        for (Interpreter intp : getInterpreterGroup()) {
+            if (intp.getClassName().equals(SparkInterpreter.class.getName())) {
+                return intp.getScheduler();
+            }
+        }
+        throw new InterpreterException("Can't find SparkInterpreter");
     }
 }

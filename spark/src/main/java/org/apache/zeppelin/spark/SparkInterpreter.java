@@ -242,7 +242,7 @@ public class SparkInterpreter extends Interpreter {
         SparkContext sc = getSparkContext();
         GigaSpacesConfig gsConfig = getGsConfig();
         GigaSpacesSparkContext gsSparkContext =
-                com.gigaspaces.spark.implicits.basic$.MODULE$.gigaSpacesSparkContext(sc);
+                com.gigaspaces.spark.implicits.all$.MODULE$.gigaSpacesSparkContext(sc);
         sqlc = gsSparkContext.gridSqlContext();
 //        sqlc = new SQLContext(getSparkContext());
       }
@@ -312,7 +312,7 @@ public class SparkInterpreter extends Interpreter {
             .set("spark.repl.class.uri", classServerUri);
 
     // set GigaSpaces config
-    com.gigaspaces.spark.implicits.basic$.MODULE$.SparkConfExtension(conf).setGigaSpaceConfig(getGsConfig());
+    com.gigaspaces.spark.implicits.all$.MODULE$.SparkConfExtension(conf).setGigaSpaceConfig(getGsConfig());
 
     if (jars.length > 0) {
       conf.setJars(jars);
@@ -536,8 +536,7 @@ public class SparkInterpreter extends Interpreter {
                  + "_binder.get(\"sqlc\").asInstanceOf[org.apache.spark.sql.SQLContext]");
     intp.interpret("import org.apache.spark.SparkContext._");
 
-    intp.interpret("import com.gigaspaces.spark.implicits.basic._");
-    intp.interpret("import org.apache.spark.sql.insightedge._");
+    intp.interpret("import com.gigaspaces.spark.implicits.all._");
     intp.interpret("import com.gigaspaces.spark.context.GigaSpacesConfig");
     intp.interpret("@transient implicit val gsConfig = "
             + "_binder.get(\"gsConfig\").asInstanceOf[com.gigaspaces.spark.context.GigaSpacesConfig]");

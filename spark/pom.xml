@@ -41,6 +41,7 @@
     <spark.version>1.4.1</spark.version>
     <scala.version>2.10.4</scala.version>
     <scala.binary.version>2.10</scala.binary.version>
+    <insightedge.version>0.4.0-SNAPSHOT</insightedge.version>
   </properties>
 
   <dependencies>
@@ -237,6 +238,14 @@
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
       <version>${jsoup.version}</version>
+    </dependency>
+
+    <!-- GigaSpaces -->
+    <dependency>
+      <groupId>com.gigaspaces.insightedge</groupId>
+      <artifactId>insightedge-core</artifactId>
+      <version>${insightedge.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!--TEST-->

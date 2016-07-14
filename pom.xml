@@ -58,6 +58,8 @@
     <module>spark-dependencies</module>
     <module>spark</module>
     <module>markdown</module>
+    <!-- TODO: temporarily disabling to speed up build process -->
+<!--
     <module>angular</module>
     <module>shell</module>
     <module>livy</module>
@@ -73,6 +75,7 @@
     <module>cassandra</module>
     <module>elasticsearch</module>
     <module>alluxio</module>
+    -->
     <module>zeppelin-web</module>
     <module>zeppelin-server</module>
     <module>zeppelin-distribution</module>
@@ -247,37 +250,37 @@
       </plugin>
 
       <!-- Checkstyle plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <configLocation>_tools/checkstyle.xml</configLocation>
-          <enableRSS>false</enableRSS>
-        </configuration>
-        <executions>
-          <execution>
-            <id>checkstyle-fail-build</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <failOnViolation>true</failOnViolation>
-              <excludes>org/apache/zeppelin/interpreter/thrift/*</excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>checkstyle-gen-html-report</id>
-            <phase>install</phase>
-            <goals>
-              <goal>checkstyle-aggregate</goal>
-            </goals>
-            <configuration>
-              <excludes>org/apache/zeppelin/interpreter/thrift/*</excludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
+        <!--<configuration>-->
+          <!--<configLocation>_tools/checkstyle.xml</configLocation>-->
+          <!--<enableRSS>false</enableRSS>-->
+        <!--</configuration>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<id>checkstyle-fail-build</id>-->
+            <!--<phase>validate</phase>-->
+            <!--<goals>-->
+              <!--<goal>check</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<failOnViolation>true</failOnViolation>-->
+              <!--<excludes>org/apache/zeppelin/interpreter/thrift/*</excludes>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+          <!--<execution>-->
+            <!--<id>checkstyle-gen-html-report</id>-->
+            <!--<phase>install</phase>-->
+            <!--<goals>-->
+              <!--<goal>checkstyle-aggregate</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<excludes>org/apache/zeppelin/interpreter/thrift/*</excludes>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
 
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>

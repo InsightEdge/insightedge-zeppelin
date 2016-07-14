@@ -25,6 +25,8 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.gigaspaces.spark.context.GigaSpacesConfig;
+import com.gigaspaces.spark.context.GigaSpacesSparkContext;
 import com.google.common.base.Joiner;
 
 import com.google.common.reflect.TypeToken;
@@ -102,6 +104,7 @@ public class SparkInterpreter extends Interpreter {
   private Map<String, Object> binder;
   private SparkVersion sparkVersion;
 
+  private GigaSpacesConfig gsConfig;
 
   public SparkInterpreter(Properties property) {
     super(property);
@@ -125,6 +128,20 @@ public class SparkInterpreter extends Interpreter {
       }
       return sc;
     }
+  }
+
+  public GigaSpacesConfig getGsConfig() {
+    if (gsConfig == null) {
+        String spaceName = getProperty("gigaspaces.spaceName");
+        String locatorStr = getProperty("gigaspaces.locator");
+        String groupStr = getProperty("gigaspaces.group");
+
+      gsConfig = new GigaSpacesConfig(
+              spaceName,
+              scala.Option.apply(groupStr),
+              scala.Option.apply(locatorStr));
+    }
+    return gsConfig;
   }
 
   public boolean isSparkContextInitialized() {
@@ -200,7 +217,12 @@ public class SparkInterpreter extends Interpreter {
             sqlc = new SQLContext(getSparkContext());
           }
         } else {
-          sqlc = new SQLContext(getSparkContext());
+            SparkContext sc = getSparkContext();
+            GigaSpacesConfig gsConfig = getGsConfig();
+            GigaSpacesSparkContext gsSparkContext =
+                  com.gigaspaces.spark.implicits.all$.MODULE$.gigaSpacesSparkContext(sc);
+            sqlc = gsSparkContext.gridSqlContext();
+//          sqlc = new SQLContext(getSparkContext());
         }
       }
       return sqlc;
@@ -267,6 +289,9 @@ public class SparkInterpreter extends Interpreter {
     if (classServerUri != null) {
       conf.set("spark.repl.class.uri", classServerUri);
     }
+
+    // set GigaSpaces config
+    com.gigaspaces.spark.implicits.all$.MODULE$.SparkConfExtension(conf).setGigaSpaceConfig(getGsConfig());
 
     if (jars.length > 0) {
       conf.setJars(jars);
@@ -528,11 +553,15 @@ public class SparkInterpreter extends Interpreter {
       z = new ZeppelinContext(sc, sqlc, null, dep,
               Integer.parseInt(getProperty("zeppelin.spark.maxResult")));
 
+      gsConfig = getGsConfig();
+
       intp.interpret("@transient var _binder = new java.util.HashMap[String, Object]()");
       binder = (Map<String, Object>) getValue("_binder");
       binder.put("sc", sc);
       binder.put("sqlc", sqlc);
       binder.put("z", z);
+      binder.put("out", printStream);
+      binder.put("gsConfig", gsConfig);
 
       intp.interpret("@transient val z = "
               + "_binder.get(\"z\").asInstanceOf[org.apache.zeppelin.spark.ZeppelinContext]");
@@ -543,6 +572,11 @@ public class SparkInterpreter extends Interpreter {
       intp.interpret("@transient val sqlContext = "
               + "_binder.get(\"sqlc\").asInstanceOf[org.apache.spark.sql.SQLContext]");
       intp.interpret("import org.apache.spark.SparkContext._");
+
+      intp.interpret("import com.gigaspaces.spark.implicits.all._");
+      intp.interpret("import com.gigaspaces.spark.context.GigaSpacesConfig");
+      intp.interpret("@transient implicit val gsConfig = "
+              + "_binder.get(\"gsConfig\").asInstanceOf[com.gigaspaces.spark.context.GigaSpacesConfig]");
 
       if (importImplicit()) {
         if (sparkVersion.oldSqlContextImplicits()) {

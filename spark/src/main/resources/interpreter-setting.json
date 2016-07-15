@@ -19,7 +19,7 @@
       "zeppelin.spark.useHiveContext": {
         "envName": "ZEPPELIN_SPARK_USEHIVECONTEXT",
         "propertyName": "zeppelin.spark.useHiveContext",
-        "defaultValue": "true",
+        "defaultValue": "false",
         "description": "Use HiveContext instead of SQLContext if it is true."
       },
       "spark.app.name": {
@@ -52,6 +52,24 @@
         "propertyName": "spark.master",
         "defaultValue": "local[*]",
         "description": "Spark master uri. ex) spark://masterhost:7077"
+      },
+      "gigaspaces.spaceName": {
+        "envName": null,
+        "propertyName": "gigaspaces.spaceName",
+        "defaultValue": "insightedge-space",
+        "description": "GigaSpaces DataGrid Space name"
+      },
+      "gigaspaces.group": {
+        "envName": null,
+        "propertyName": "gigaspaces.group",
+        "defaultValue": "insightedge",
+        "description": "GigaSpaces DataGrid group"
+      },
+      "gigaspaces.locator": {
+        "envName": null,
+        "propertyName": "gigaspaces.locator",
+        "defaultValue": "127.0.0.1:4174",
+        "description": "GigaSpaces DataGrid locator"
       }
     }
   },

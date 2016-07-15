@@ -19,6 +19,7 @@ package org.apache.zeppelin.spark;
 
 import com.gigaspaces.spark.utils.StringCompiler;
 import org.apache.zeppelin.interpreter.*;
+import org.apache.zeppelin.interpreter.thrift.InterpreterCompletion;
 import org.apache.zeppelin.scheduler.Scheduler;
 import scala.collection.Iterator;
 
@@ -61,10 +62,10 @@ public class CompilingInterpreter extends Interpreter {
     @Override
     public Scheduler getScheduler() {
         // reuse Spark scheduler to make sure %def jobs are run sequentially with %spark ones
-        for (Interpreter intp : getInterpreterGroup()) {
-            if (intp.getClassName().equals(SparkInterpreter.class.getName())) {
-                return intp.getScheduler();
-            }
+        Interpreter intp =
+                getInterpreterInTheSameSessionByClassName(SparkInterpreter.class.getName());
+        if (intp != null) {
+            return intp.getScheduler();
         }
         throw new InterpreterException("Can't find SparkInterpreter");
     }
@@ -108,28 +109,23 @@ public class CompilingInterpreter extends Interpreter {
     }
 
     @Override
-    public List<String> completion(String buf, int cursor) {
+    public List<InterpreterCompletion> completion(String buf, int cursor) {
         return depInterpreter.completion(buf, cursor);
     }
 
     private DepInterpreter getDepInterpreter() {
-        InterpreterGroup intpGroup = getInterpreterGroup();
         LazyOpenInterpreter lazy = null;
-        DepInterpreter dep = null;
-        synchronized (intpGroup) {
-            for (Interpreter intp : getInterpreterGroup()) {
-                if (intp.getClassName().equals(DepInterpreter.class.getName())) {
-                    Interpreter interpreter = intp;
-                    while (interpreter instanceof WrappedInterpreter) {
-                        if (interpreter instanceof LazyOpenInterpreter) {
-                            lazy = (LazyOpenInterpreter) interpreter;
-                        }
-                        interpreter = ((WrappedInterpreter) interpreter).getInnerInterpreter();
-                    }
-                    dep = (DepInterpreter) interpreter;
-                }
+        DepInterpreter dep;
+        Interpreter p = getInterpreterInTheSameSessionByClassName(DepInterpreter.class.getName());
+
+        while (p instanceof WrappedInterpreter) {
+            if (p instanceof LazyOpenInterpreter) {
+                lazy = (LazyOpenInterpreter) p;
             }
+            p = ((WrappedInterpreter) p).getInnerInterpreter();
         }
+        dep = (DepInterpreter) p;
+
         if (lazy != null) {
             lazy.open();
         }

@@ -218,7 +218,6 @@ public class SparkInterpreter extends Interpreter {
           }
         } else {
             SparkContext sc = getSparkContext();
-            GigaSpacesConfig gsConfig = getGsConfig();
             GigaSpacesSparkContext gsSparkContext =
                   com.gigaspaces.spark.implicits.all$.MODULE$.gigaSpacesSparkContext(sc);
             sqlc = gsSparkContext.gridSqlContext();
@@ -560,7 +559,6 @@ public class SparkInterpreter extends Interpreter {
       binder.put("sc", sc);
       binder.put("sqlc", sqlc);
       binder.put("z", z);
-      binder.put("out", printStream);
       binder.put("gsConfig", gsConfig);
 
       intp.interpret("@transient val z = "

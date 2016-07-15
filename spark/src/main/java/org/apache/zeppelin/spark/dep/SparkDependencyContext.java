@@ -66,8 +66,8 @@ public class SparkDependencyContext {
   }
 
   public Dependency load(String lib) {
-    Console.println("DepInterpreter(%dep) deprecated. "
-        + "Load dependency through GUI interpreter menu instead.");
+//    Console.println("DepInterpreter(%dep) deprecated. "
+//        + "Load dependency through GUI interpreter menu instead.");
     Dependency dep = new Dependency(lib);
 
     if (dependencies.contains(dep)) {
@@ -78,16 +78,16 @@ public class SparkDependencyContext {
   }
 
   public Repository addRepo(String name) {
-    Console.println("DepInterpreter(%dep) deprecated. "
-        + "Add repository through GUI interpreter menu instead.");
+//    Console.println("DepInterpreter(%dep) deprecated. "
+//        + "Add repository through GUI interpreter menu instead.");
     Repository rep = new Repository(name);
     repositories.add(rep);
     return rep;
   }
 
   public void reset() {
-    Console.println("DepInterpreter(%dep) deprecated. "
-        + "Remove dependencies and repositories through GUI interpreter menu instead.");
+//    Console.println("DepInterpreter(%dep) deprecated. "
+//        + "Remove dependencies and repositories through GUI interpreter menu instead.");
     dependencies = new LinkedList<Dependency>();
     repositories = new LinkedList<Repository>();
 

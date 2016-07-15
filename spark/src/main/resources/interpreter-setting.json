@@ -50,7 +50,7 @@
       "master": {
         "envName": "MASTER",
         "propertyName": "spark.master",
-        "defaultValue": "local[*]",
+        "defaultValue": "spark://127.0.0.1:7077",
         "description": "Spark master uri. ex) spark://masterhost:7077"
       },
       "gigaspaces.spaceName": {
@@ -70,6 +70,12 @@
         "propertyName": "gigaspaces.locator",
         "defaultValue": "127.0.0.1:4174",
         "description": "GigaSpaces DataGrid locator"
+      },
+      "spark.externalBlockStore.blockManager": {
+        "envName": null,
+        "propertyName": "spark.externalBlockStore.blockManager",
+        "defaultValue": "org.apache.spark.storage.GigaSpacesBlockManager",
+        "description": "GigaSpaces Off-Heap Storage Manager"
       }
     }
   },

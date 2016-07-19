@@ -91,7 +91,8 @@ public class CompilingInterpreter extends Interpreter {
         }
 
         File jar = compiler.packJar();
-        return depInterpreter.interpret("z.load(\"" + jar.getAbsolutePath() + "\")", context);
+        String pathToJar = jar.getAbsolutePath().replace("\\", "\\\\"); // replace slashes for Win
+        return depInterpreter.interpret("z.load(\"" + pathToJar + "\")", context);
     }
 
     @Override

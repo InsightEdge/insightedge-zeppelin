@@ -141,5 +141,11 @@
         "description": "Python command to run pyspark with"
       }
     }
+  },
+  {
+    "group": "spark",
+    "name": "define",
+    "className": "org.apache.zeppelin.spark.CompilingInterpreter",
+    "properties": { }
   }
 ]

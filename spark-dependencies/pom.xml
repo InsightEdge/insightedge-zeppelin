@@ -73,7 +73,7 @@
     <spark.dist.cache>${project.build.directory}/../../.spark-dist</spark.dist.cache>
     <py4j.version>0.8.2.1</py4j.version>
 
-    <insightedge.version>0.4.0-SNAPSHOT</insightedge.version>
+    <insightedge.version>1.0.0</insightedge.version>
   </properties>
 
   <dependencyManagement>

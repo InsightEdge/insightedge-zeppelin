@@ -41,7 +41,7 @@
     <spark.version>1.4.1</spark.version>
     <scala.version>2.10.4</scala.version>
     <scala.binary.version>2.10</scala.binary.version>
-    <insightedge.version>0.4.0-SNAPSHOT</insightedge.version>
+    <insightedge.version>1.0.0</insightedge.version>
   </properties>
 
   <dependencies>

@@ -17,10 +17,10 @@
 
 package org.apache.zeppelin.spark;
 
-import com.gigaspaces.spark.utils.StringCompiler;
 import org.apache.zeppelin.interpreter.*;
 import org.apache.zeppelin.interpreter.thrift.InterpreterCompletion;
 import org.apache.zeppelin.scheduler.Scheduler;
+import org.insightedge.spark.utils.StringCompiler;
 import scala.collection.Iterator;
 
 import java.io.File;

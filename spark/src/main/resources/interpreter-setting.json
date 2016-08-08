@@ -53,29 +53,29 @@
         "defaultValue": "spark://127.0.0.1:7077",
         "description": "Spark master uri. ex) spark://masterhost:7077"
       },
-      "gigaspaces.spaceName": {
+      "insightedge.spaceName": {
         "envName": null,
-        "propertyName": "gigaspaces.spaceName",
+        "propertyName": "insightedge.spaceName",
         "defaultValue": "insightedge-space",
-        "description": "GigaSpaces DataGrid Space name"
+        "description": "InsightEdge DataGrid Space name"
       },
-      "gigaspaces.group": {
+      "insightedge.group": {
         "envName": null,
-        "propertyName": "gigaspaces.group",
+        "propertyName": "insightedge.group",
         "defaultValue": "insightedge",
-        "description": "GigaSpaces DataGrid group"
+        "description": "InsightEdge DataGrid group"
       },
-      "gigaspaces.locator": {
+      "insightedge.locator": {
         "envName": null,
-        "propertyName": "gigaspaces.locator",
+        "propertyName": "insightedge.locator",
         "defaultValue": "127.0.0.1:4174",
-        "description": "GigaSpaces DataGrid locator"
+        "description": "InsightEdge DataGrid locator"
       },
       "spark.externalBlockStore.blockManager": {
         "envName": null,
         "propertyName": "spark.externalBlockStore.blockManager",
-        "defaultValue": "org.apache.spark.storage.GigaSpacesBlockManager",
-        "description": "GigaSpaces Off-Heap Storage Manager"
+        "defaultValue": "org.apache.spark.storage.InsightEdgeBlockManager",
+        "description": "InsightEdge Off-Heap Storage Manager"
       }
     }
   },

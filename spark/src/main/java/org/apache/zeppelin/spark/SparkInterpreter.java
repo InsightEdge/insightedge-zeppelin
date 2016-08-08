@@ -17,20 +17,7 @@
 
 package org.apache.zeppelin.spark;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.lang.reflect.*;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.gigaspaces.spark.context.GigaSpacesConfig;
-import com.gigaspaces.spark.context.GigaSpacesSparkContext;
 import com.google.common.base.Joiner;
-
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import org.apache.spark.HttpServer;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
@@ -44,31 +31,27 @@ import org.apache.spark.scheduler.DAGScheduler;
 import org.apache.spark.scheduler.Pool;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.ui.jobs.JobProgressListener;
-import org.apache.zeppelin.interpreter.Interpreter;
-import org.apache.zeppelin.interpreter.InterpreterContext;
-import org.apache.zeppelin.interpreter.InterpreterException;
-import org.apache.zeppelin.interpreter.InterpreterPropertyBuilder;
-import org.apache.zeppelin.interpreter.InterpreterResult;
+import org.apache.zeppelin.interpreter.*;
 import org.apache.zeppelin.interpreter.InterpreterResult.Code;
-import org.apache.zeppelin.interpreter.InterpreterUtils;
-import org.apache.zeppelin.interpreter.WrappedInterpreter;
 import org.apache.zeppelin.interpreter.thrift.InterpreterCompletion;
 import org.apache.zeppelin.scheduler.Scheduler;
 import org.apache.zeppelin.scheduler.SchedulerFactory;
 import org.apache.zeppelin.spark.dep.SparkDependencyContext;
 import org.apache.zeppelin.spark.dep.SparkDependencyResolver;
+import org.insightedge.spark.context.InsightEdgeConfig;
+import org.insightedge.spark.context.InsightEdgeSparkContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import scala.*;
+import scala.Console;
 import scala.Enumeration.Value;
+import scala.None;
+import scala.Some;
+import scala.Tuple2;
 import scala.collection.Iterator;
 import scala.collection.JavaConversions;
 import scala.collection.JavaConverters;
-import scala.collection.convert.WrapAsJava;
 import scala.collection.Seq;
 import scala.collection.convert.WrapAsJava$;
-import scala.collection.convert.WrapAsScala;
 import scala.collection.mutable.HashMap;
 import scala.collection.mutable.HashSet;
 import scala.reflect.io.AbstractFile;
@@ -78,6 +61,17 @@ import scala.tools.nsc.interpreter.Completion.ScalaCompleter;
 import scala.tools.nsc.settings.MutableSettings;
 import scala.tools.nsc.settings.MutableSettings.BooleanSetting;
 import scala.tools.nsc.settings.MutableSettings.PathSetting;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Spark interpreter for Zeppelin.
@@ -104,7 +98,7 @@ public class SparkInterpreter extends Interpreter {
   private Map<String, Object> binder;
   private SparkVersion sparkVersion;
 
-  private GigaSpacesConfig gsConfig;
+  private InsightEdgeConfig ieConfig;
 
   public SparkInterpreter(Properties property) {
     super(property);
@@ -130,18 +124,18 @@ public class SparkInterpreter extends Interpreter {
     }
   }
 
-  public GigaSpacesConfig getGsConfig() {
-    if (gsConfig == null) {
-        String spaceName = getProperty("gigaspaces.spaceName");
-        String locatorStr = getProperty("gigaspaces.locator");
-        String groupStr = getProperty("gigaspaces.group");
+  public InsightEdgeConfig getIeConfig() {
+    if (ieConfig == null) {
+        String spaceName = getProperty("insightedge.spaceName");
+        String locatorStr = getProperty("insightedge.locator");
+        String groupStr = getProperty("insightedge.group");
 
-      gsConfig = new GigaSpacesConfig(
+      ieConfig = new InsightEdgeConfig(
               spaceName,
               scala.Option.apply(groupStr),
               scala.Option.apply(locatorStr));
     }
-    return gsConfig;
+    return ieConfig;
   }
 
   public boolean isSparkContextInitialized() {
@@ -218,8 +212,8 @@ public class SparkInterpreter extends Interpreter {
           }
         } else {
             SparkContext sc = getSparkContext();
-            GigaSpacesSparkContext gsSparkContext =
-                  com.gigaspaces.spark.implicits.all$.MODULE$.gigaSpacesSparkContext(sc);
+            InsightEdgeSparkContext gsSparkContext =
+                  org.insightedge.spark.implicits.all$.MODULE$.insightEdgeSparkContext(sc);
             sqlc = gsSparkContext.gridSqlContext();
 //          sqlc = new SQLContext(getSparkContext());
         }
@@ -289,8 +283,8 @@ public class SparkInterpreter extends Interpreter {
       conf.set("spark.repl.class.uri", classServerUri);
     }
 
-    // set GigaSpaces config
-    com.gigaspaces.spark.implicits.all$.MODULE$.SparkConfExtension(conf).setGigaSpaceConfig(getGsConfig());
+    // set InsightEdge config
+    org.insightedge.spark.implicits.all$.MODULE$.SparkConfExtension(conf).setInsightEdgeConfig(getIeConfig());
 
     if (jars.length > 0) {
       conf.setJars(jars);
@@ -552,14 +546,14 @@ public class SparkInterpreter extends Interpreter {
       z = new ZeppelinContext(sc, sqlc, null, dep,
               Integer.parseInt(getProperty("zeppelin.spark.maxResult")));
 
-      gsConfig = getGsConfig();
+      ieConfig = getIeConfig();
 
       intp.interpret("@transient var _binder = new java.util.HashMap[String, Object]()");
       binder = (Map<String, Object>) getValue("_binder");
       binder.put("sc", sc);
       binder.put("sqlc", sqlc);
       binder.put("z", z);
-      binder.put("gsConfig", gsConfig);
+      binder.put("ieConfig", ieConfig);
 
       intp.interpret("@transient val z = "
               + "_binder.get(\"z\").asInstanceOf[org.apache.zeppelin.spark.ZeppelinContext]");
@@ -571,10 +565,10 @@ public class SparkInterpreter extends Interpreter {
               + "_binder.get(\"sqlc\").asInstanceOf[org.apache.spark.sql.SQLContext]");
       intp.interpret("import org.apache.spark.SparkContext._");
 
-      intp.interpret("import com.gigaspaces.spark.implicits.all._");
-      intp.interpret("import com.gigaspaces.spark.context.GigaSpacesConfig");
-      intp.interpret("@transient implicit val gsConfig = "
-              + "_binder.get(\"gsConfig\").asInstanceOf[com.gigaspaces.spark.context.GigaSpacesConfig]");
+      intp.interpret("import org.insightedge.spark.implicits.all._");
+      intp.interpret("import org.insightedge.spark.context.InsightEdgeConfig");
+      intp.interpret("@transient implicit val ieConfig = "
+              + "_binder.get(\"ieConfig\").asInstanceOf[org.insightedge.spark.context.InsightEdgeConfig]");
 
       if (importImplicit()) {
         if (sparkVersion.oldSqlContextImplicits()) {

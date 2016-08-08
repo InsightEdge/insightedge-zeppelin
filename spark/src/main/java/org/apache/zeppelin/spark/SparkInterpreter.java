@@ -124,7 +124,7 @@ public class SparkInterpreter extends Interpreter {
     }
   }
 
-  public InsightEdgeConfig getGsConfig() {
+  public InsightEdgeConfig getIeConfig() {
     if (ieConfig == null) {
         String spaceName = getProperty("insightedge.spaceName");
         String locatorStr = getProperty("insightedge.locator");
@@ -284,7 +284,7 @@ public class SparkInterpreter extends Interpreter {
     }
 
     // set InsightEdge config
-    org.insightedge.spark.implicits.all$.MODULE$.SparkConfExtension(conf).setInsightEdgeConfig(getGsConfig());
+    org.insightedge.spark.implicits.all$.MODULE$.SparkConfExtension(conf).setInsightEdgeConfig(getIeConfig());
 
     if (jars.length > 0) {
       conf.setJars(jars);
@@ -546,7 +546,7 @@ public class SparkInterpreter extends Interpreter {
       z = new ZeppelinContext(sc, sqlc, null, dep,
               Integer.parseInt(getProperty("zeppelin.spark.maxResult")));
 
-      ieConfig = getGsConfig();
+      ieConfig = getIeConfig();
 
       intp.interpret("@transient var _binder = new java.util.HashMap[String, Object]()");
       binder = (Map<String, Object>) getValue("_binder");

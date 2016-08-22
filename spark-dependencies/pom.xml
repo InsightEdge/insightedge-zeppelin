@@ -359,7 +359,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.gigaspaces.insightedge</groupId>
+      <groupId>org.gigaspaces.insightedge</groupId>
       <artifactId>insightedge-core</artifactId>
       <version>${insightedge.version}</version>
     </dependency>

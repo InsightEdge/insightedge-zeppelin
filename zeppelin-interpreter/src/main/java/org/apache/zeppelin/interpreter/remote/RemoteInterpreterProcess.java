@@ -113,6 +113,11 @@ public class RemoteInterpreterProcess implements ExecuteResultHandler {
                   + "Please specify the port on which interpreter is listening");
             }
           }
+          executor = new DefaultExecutor();
+
+          watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
+          executor.setWatchdog(watchdog);
+
           running = true;
         }
 
@@ -251,7 +256,7 @@ public class RemoteInterpreterProcess implements ExecuteResultHandler {
           }
         }
 
-        if (isRunning()) {
+        if (isRunning() && !isInterpreterAlreadyExecuting) {
           logger.info("kill interpreter process");
           watchdog.destroyProcess();
         }

@@ -22,15 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.6.1</version>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-hbase</artifactId>
   <packaging>jar</packaging>
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.6.1</version>
   <name>Zeppelin: HBase interpreter</name>
-  <url>http://www.apache.org</url>
 
   <properties>
     <hbase.hbase.version>1.0.0</hbase.hbase.version>

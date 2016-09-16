@@ -28,6 +28,9 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
@@ -36,6 +39,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.zeppelin.conf.ZeppelinConfiguration;
 import org.apache.zeppelin.dep.Dependency;
 import org.apache.zeppelin.interpreter.InterpreterGroup;
 import org.apache.zeppelin.interpreter.InterpreterOption;
@@ -99,6 +103,30 @@ public abstract class AbstractTestRestApi {
   protected static void startUp() throws Exception {
     if (!wasRunning) {
       LOG.info("Staring test Zeppelin up...");
+
+
+      // exclude org.apache.zeppelin.rinterpreter.* for scala 2.11 test
+      ZeppelinConfiguration conf = ZeppelinConfiguration.create();
+      String interpreters = conf.getString(ZeppelinConfiguration.ConfVars.ZEPPELIN_INTERPRETERS);
+      String interpretersCompatibleWithScala211Test = null;
+
+      for (String intp : interpreters.split(",")) {
+        if (intp.startsWith("org.apache.zeppelin.rinterpreter")) {
+          continue;
+        }
+
+        if (interpretersCompatibleWithScala211Test == null) {
+          interpretersCompatibleWithScala211Test = intp;
+        } else {
+          interpretersCompatibleWithScala211Test += "," + intp;
+        }
+      }
+
+      System.setProperty(
+          ZeppelinConfiguration.ConfVars.ZEPPELIN_INTERPRETERS.getVarName(),
+          interpretersCompatibleWithScala211Test);
+
+
       executor = Executors.newSingleThreadExecutor();
       executor.submit(server);
       long s = System.currentTimeMillis();
@@ -202,7 +230,7 @@ public abstract class AbstractTestRestApi {
   }
 
   private static boolean isActiveSparkHome(File dir) {
-    if (dir.getName().matches("spark-[0-9\\.]+-bin-hadoop[0-9\\.]+")) {
+    if (dir.getName().matches("spark-[0-9\\.]+[A-Za-z-]*-bin-hadoop[0-9\\.]+")) {
       File pidDir = new File(dir, "run");
       if (pidDir.isDirectory() && pidDir.listFiles().length > 0) {
         return true;
@@ -238,6 +266,8 @@ public abstract class AbstractTestRestApi {
       }
 
       LOG.info("Test Zeppelin terminated.");
+
+      System.clearProperty(ZeppelinConfiguration.ConfVars.ZEPPELIN_INTERPRETERS.getVarName());
     }
   }
 
@@ -403,6 +433,22 @@ public abstract class AbstractTestRestApi {
       }
     };
   }
+
+
+  public static void ps() {
+    DefaultExecutor executor = new DefaultExecutor();
+    executor.setStreamHandler(new PumpStreamHandler(System.out, System.err));
+
+    CommandLine cmd = CommandLine.parse("ps");
+    cmd.addArgument("aux", false);
+
+    try {
+      executor.execute(cmd);
+    } catch (IOException e) {
+      LOG.error(e.getMessage(), e);
+    }
+  }
+
 
   /** Status code matcher */
   protected Matcher<? super HttpMethodBase> isForbiden() { return responsesWith(403); }

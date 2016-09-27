@@ -22,26 +22,23 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.6.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
-  <artifactId>zeppelin-spark</artifactId>
+  <artifactId>zeppelin-spark_2.10</artifactId>
   <packaging>jar</packaging>
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.6.2-SNAPSHOT</version>
   <name>Zeppelin: Spark</name>
   <description>Zeppelin spark support</description>
-  <url>http://zeppelin.apache.org</url>
 
   <properties>
     <jsoup.version>1.8.2</jsoup.version>
     <mockito.version>1.10.19</mockito.version>
     <powermock.version>1.6.4</powermock.version>
-    <spark.version>1.4.1</spark.version>
-    <scala.version>2.10.4</scala.version>
-    <scala.binary.version>2.10</scala.binary.version>
-    <insightedge.version>1.1.0-SNAPSHOT</insightedge.version>
+    <spark.version>2.0.0</spark.version>
+      <insightedge.version>1.1.0-SNAPSHOT</insightedge.version>
   </properties>
 
   <dependencies>
@@ -57,7 +54,7 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>zeppelin-display</artifactId>
+      <artifactId>zeppelin-display_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -69,7 +66,7 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>zeppelin-spark-dependencies</artifactId>
+      <artifactId>zeppelin-spark-dependencies_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -252,7 +249,7 @@
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_${scala.binary.version}</artifactId>
-      <version>2.2.4</version>
+      <version>${scalatest.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -414,6 +411,7 @@
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
+        <version>2.15.2</version>
         <executions>
           <execution>
             <id>compile</id>
@@ -442,7 +440,6 @@
   </build>
 
   <profiles>
-
     <!-- to deactivate 'exclude-sparkr' automatically when 'spark' is activated -->
     <profile>
       <id>sparkr</id>
@@ -504,5 +501,4 @@
       </build>
     </profile>
   </profiles>
-
 </project>

@@ -17,6 +17,7 @@
  */
 package org.apache.zeppelin.flink;
 
+import java.lang.reflect.InvocationTargetException;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,14 +25,12 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.flink.api.scala.FlinkILoop;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.minicluster.LocalFlinkMiniCluster;
+import org.apache.flink.runtime.util.EnvironmentInformation;
 import org.apache.zeppelin.interpreter.Interpreter;
 import org.apache.zeppelin.interpreter.InterpreterContext;
 import org.apache.zeppelin.interpreter.InterpreterPropertyBuilder;
@@ -44,7 +43,10 @@ import org.slf4j.LoggerFactory;
 
 import scala.Console;
 import scala.None;
+import scala.Option;
 import scala.Some;
+import scala.collection.JavaConversions;
+import scala.collection.immutable.Nil;
 import scala.runtime.AbstractFunction0;
 import scala.tools.nsc.Settings;
 import scala.tools.nsc.interpreter.IMain;
@@ -83,27 +85,47 @@ public class FlinkInterpreter extends Interpreter {
       startFlinkMiniCluster();
     }
 
-    flinkIloop = new FlinkILoop(getHost(), getPort(), (BufferedReader) null, new PrintWriter(out));
+    flinkIloop = new FlinkILoop(getHost(),
+                                getPort(),
+                                flinkConf,
+                                (BufferedReader) null,
+                                new PrintWriter(out));
+
     flinkIloop.settings_$eq(createSettings());
     flinkIloop.createInterpreter();
-    
+
     imain = flinkIloop.intp();
 
-    org.apache.flink.api.scala.ExecutionEnvironment env = flinkIloop.scalaEnv();
-    env.getConfig().disableSysoutLogging();
+    org.apache.flink.api.scala.ExecutionEnvironment benv =
+            flinkIloop.scalaBenv();
+            //new ExecutionEnvironment(remoteBenv)
+    org.apache.flink.streaming.api.scala.StreamExecutionEnvironment senv =
+            flinkIloop.scalaSenv();
+
+    senv.getConfig().disableSysoutLogging();
+    benv.getConfig().disableSysoutLogging();
 
     // prepare bindings
     imain.interpret("@transient var _binder = new java.util.HashMap[String, Object]()");
-    binder = (Map<String, Object>) getValue("_binder");    
+    Map<String, Object> binder = (Map<String, Object>) getLastObject();
 
     // import libraries
     imain.interpret("import scala.tools.nsc.io._");
     imain.interpret("import Properties.userHome");
     imain.interpret("import scala.compat.Platform.EOL");
-    
+
     imain.interpret("import org.apache.flink.api.scala._");
     imain.interpret("import org.apache.flink.api.common.functions._");
-    imain.bindValue("env", env);
+
+
+    binder.put("benv", benv);
+    imain.interpret("val benv = _binder.get(\"benv\").asInstanceOf["
+            + benv.getClass().getName() + "]");
+
+    binder.put("senv", senv);
+    imain.interpret("val senv = _binder.get(\"senv\").asInstanceOf["
+            + senv.getClass().getName() + "]");
+
   }
 
   private boolean localMode() {
@@ -192,16 +214,11 @@ public class FlinkInterpreter extends Interpreter {
     return paths;
   }
 
-  public Object getValue(String name) {
-    IMain imain = flinkIloop.intp();
-    Object ret = imain.valueOfTerm(name);
-    if (ret instanceof None) {
-      return null;
-    } else if (ret instanceof Some) {
-      return ((Some) ret).get();
-    } else {
-      return ret;
-    }
+  public Object getLastObject() {
+    Object obj = imain.lastRequest().lineRep().call(
+        "$result",
+        JavaConversions.asScalaBuffer(new LinkedList<Object>()));
+    return obj;
   }
 
   @Override
@@ -315,8 +332,6 @@ public class FlinkInterpreter extends Interpreter {
     }
   }
 
-
-
   @Override
   public void cancel(InterpreterContext context) {
   }
@@ -356,4 +371,5 @@ public class FlinkInterpreter extends Interpreter {
   static final String toString(Object o) {
     return (o instanceof String) ? (String) o : "";
   }
+  
 }

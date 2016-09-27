@@ -27,19 +27,21 @@ from pyspark.storagelevel import StorageLevel
 from pyspark.accumulators import Accumulator, AccumulatorParam
 from pyspark.broadcast import Broadcast
 from pyspark.serializers import MarshalSerializer, PickleSerializer
+import ast
+import traceback
 
 # for back compatibility
-from pyspark.sql import SQLContext, HiveContext, SchemaRDD, Row
+from pyspark.sql import SQLContext, HiveContext, Row
 
 class Logger(object):
   def __init__(self):
-    self.out = ""
+    pass
 
   def write(self, message):
     intp.appendOutput(message)
 
   def reset(self):
-    self.out = ""
+    pass
 
   def flush(self):
     pass
@@ -105,8 +107,9 @@ class PyZeppelinContext(dict):
 
 
 class SparkVersion(object):
-  SPARK_1_4_0 = 140
-  SPARK_1_3_0 = 130
+  SPARK_1_4_0 = 10400
+  SPARK_1_3_0 = 10300
+  SPARK_2_0_0 = 20000
 
   def __init__(self, versionNumber):
     self.version = versionNumber
@@ -116,6 +119,9 @@ class SparkVersion(object):
 
   def isImportAllPackageUnderSparkSql(self):
     return self.version >= self.SPARK_1_3_0
+
+  def isSpark2(self):
+    return self.version >= self.SPARK_2_0_0
 
 class PySparkCompletion:
   def __init__(self, interpreterObject):
@@ -175,6 +181,12 @@ sys.stderr = output
 client = GatewayClient(port=int(sys.argv[1]))
 sparkVersion = SparkVersion(int(sys.argv[2]))
 
+if sparkVersion.isSpark2():
+  from pyspark.sql import SparkSession
+else:
+  from pyspark.sql import SchemaRDD
+
+
 if sparkVersion.isAutoConvertEnabled():
   gateway = JavaGateway(client, auto_convert = True)
 else:
@@ -206,7 +218,11 @@ java_import(gateway.jvm, "scala.Tuple2")
 jconf = intp.getSparkConf()
 conf = SparkConf(_jvm = gateway.jvm, _jconf = jconf)
 sc = SparkContext(jsc=jsc, gateway=gateway, conf=conf)
-sqlc = SQLContext(sc, intp.getSQLContext())
+if sparkVersion.isSpark2():
+  spark = SparkSession(sc, intp.getSparkSession())
+  sqlc = spark._wrapped
+else:
+  sqlc = SQLContext(sparkContext=sc, sqlContext=intp.getSQLContext())
 sqlContext = sqlc
 
 completion = PySparkCompletion(intp)
@@ -217,7 +233,7 @@ while True :
   try:
     stmts = req.statements().split("\n")
     jobGroup = req.jobGroup()
-    final_code = None
+    final_code = []
 
     for s in stmts:
       if s == None:
@@ -228,15 +244,27 @@ while True :
       if len(s_stripped) == 0 or s_stripped.startswith("#"):
         continue
 
-      if final_code:
-        final_code += "\n" + s
-      else:
-        final_code = s
+      final_code.append(s)
 
     if final_code:
-      compiledCode = compile(final_code, "<string>", "exec")
+      # use exec mode to compile the statements except the last statement,
+      # so that the last statement's evaluation will be printed to stdout
       sc.setJobGroup(jobGroup, "Zeppelin")
-      eval(compiledCode)
+      code = compile('\n'.join(final_code), '<stdin>', 'exec', ast.PyCF_ONLY_AST, 1)
+      to_run_exec, to_run_single = code.body[:-1], code.body[-1:]
+
+      try:
+        for node in to_run_exec:
+          mod = ast.Module([node])
+          code = compile(mod, '<stdin>', 'exec')
+          exec(code)
+
+        for node in to_run_single:
+          mod = ast.Interactive([node])
+          code = compile(mod, '<stdin>', 'single')
+          exec(code)
+      except:
+        raise Exception(traceback.format_exc())
 
     intp.setStatementsFinished("", False)
   except Py4JJavaError:

@@ -22,16 +22,15 @@
     <parent>
         <artifactId>zeppelin</artifactId>
         <groupId>org.apache.zeppelin</groupId>
-        <version>0.6.1-SNAPSHOT</version>
+        <version>0.6.2-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
     <groupId>org.apache.zeppelin</groupId>
     <artifactId>zeppelin-alluxio</artifactId>
     <packaging>jar</packaging>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.6.2-SNAPSHOT</version>
     <name>Zeppelin: Alluxio interpreter</name>
-    <url>http://www.apache.org</url>
 
     <properties>
         <alluxio.version>1.0.0</alluxio.version>

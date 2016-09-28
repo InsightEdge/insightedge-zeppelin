@@ -17,41 +17,21 @@
 
 package org.apache.zeppelin.spark;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.*;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.google.common.base.Joiner;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.spark.HttpServer;
+import org.apache.spark.SecurityManager;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.SparkEnv;
-
-import org.apache.spark.SecurityManager;
 import org.apache.spark.repl.SparkILoop;
 import org.apache.spark.scheduler.ActiveJob;
 import org.apache.spark.scheduler.DAGScheduler;
 import org.apache.spark.scheduler.Pool;
 import org.apache.spark.sql.SQLContext;
+import org.apache.spark.sql.SparkSession.Builder;
 import org.apache.spark.ui.jobs.JobProgressListener;
 import org.apache.zeppelin.interpreter.*;
-import org.apache.zeppelin.interpreter.Interpreter;
-import org.apache.zeppelin.interpreter.InterpreterContext;
-import org.apache.zeppelin.interpreter.InterpreterException;
-import org.apache.zeppelin.interpreter.InterpreterResult;
 import org.apache.zeppelin.interpreter.InterpreterResult.Code;
 import org.apache.zeppelin.interpreter.thrift.InterpreterCompletion;
 import org.apache.zeppelin.scheduler.Scheduler;
@@ -86,6 +66,7 @@ import scala.tools.nsc.settings.MutableSettings.BooleanSetting;
 import scala.tools.nsc.settings.MutableSettings.PathSetting;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -265,7 +246,8 @@ public class SparkInterpreter extends Interpreter {
    */
   private SQLContext getSQLContext_2() {
     if (sqlc == null) {
-      sqlc = (SQLContext) Utils.invokeMethod(sparkSession, "sqlContext");
+      sqlc = getInsightEdgeSQLContext();
+      //sqlc = (SQLContext) Utils.invokeMethod(sparkSession, "sqlContext");
     }
     return sqlc;
   }
@@ -289,16 +271,19 @@ public class SparkInterpreter extends Interpreter {
           sqlc = new SQLContext(getSparkContext());
         }
       } else {
-          SparkContext sc = getSparkContext();
-          InsightEdgeSparkContext gsSparkContext =
-                  org.insightedge.spark.implicits.all$.MODULE$.insightEdgeSparkContext(sc);
-          sqlc = gsSparkContext.gridSqlContext();
+        sqlc = getInsightEdgeSQLContext();
         //sqlc = new SQLContext(getSparkContext());
       }
     }
     return sqlc;
   }
 
+  private SQLContext getInsightEdgeSQLContext() {
+    SparkContext sc = getSparkContext();
+    InsightEdgeSparkContext gsSparkContext =
+            org.insightedge.spark.implicits.all$.MODULE$.insightEdgeSparkContext(sc);
+    return gsSparkContext.gridSqlContext();
+  }
 
   public SparkDependencyResolver getDependencyResolver() {
     if (dep == null) {
@@ -378,6 +363,7 @@ public class SparkInterpreter extends Interpreter {
         logger.info("Created Spark session with Hive support");
       }
     } else {
+      org.insightedge.spark.implicits.all$.MODULE$.SparkSessionBuilderExtension((Builder) builder).insightEdgeConfig(getIeConfig());
       sparkSession = Utils.invokeMethod(builder, "getOrCreate");
       logger.info("Created Spark session");
     }
@@ -869,9 +855,9 @@ public class SparkInterpreter extends Interpreter {
 
       interpret("import org.apache.spark.SparkContext._");
 
-      intp.interpret("import org.insightedge.spark.implicits.all._");
-      intp.interpret("import org.insightedge.spark.context.InsightEdgeConfig");
-      intp.interpret("@transient implicit val ieConfig = "
+      interpret("import org.insightedge.spark.implicits.all._");
+      interpret("import org.insightedge.spark.context.InsightEdgeConfig");
+      interpret("@transient implicit val ieConfig = "
               + "_binder.get(\"ieConfig\").asInstanceOf[org.insightedge.spark.context.InsightEdgeConfig]");
 
       if (importImplicit()) {

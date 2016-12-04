@@ -116,7 +116,7 @@
               <goal>bower</goal>
             </goals>
             <configuration>
-              <arguments>--allow-root install</arguments>
+              <arguments>--allow-root --force-latest install</arguments>
             </configuration>
           </execution>
 

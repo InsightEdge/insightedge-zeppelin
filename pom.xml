@@ -58,24 +58,24 @@
     <module>spark-dependencies</module>
     <module>spark</module>
     <module>markdown</module>
-    <module>angular</module>
-    <module>shell</module>
-    <module>livy</module>
-    <module>hbase</module>
-    <module>pig</module>
-    <module>postgresql</module>
-    <module>jdbc</module>
-    <module>file</module>
-    <module>flink</module>
-    <module>ignite</module>
-    <module>kylin</module>
-    <module>python</module>
-    <module>lens</module>
-    <module>cassandra</module>
-    <module>elasticsearch</module>
-    <module>bigquery</module>
-    <module>alluxio</module>
-    <module>scio</module>
+    <!--<module>angular</module>-->
+    <!--<module>shell</module>-->
+    <!--<module>livy</module>-->
+    <!--<module>hbase</module>-->
+    <!--<module>pig</module>-->
+    <!--<module>postgresql</module>-->
+    <!--<module>jdbc</module>-->
+    <!--<module>file</module>-->
+    <!--<module>flink</module>-->
+    <!--<module>ignite</module>-->
+    <!--<module>kylin</module>-->
+    <!--<module>python</module>-->
+    <!--<module>lens</module>-->
+    <!--<module>cassandra</module>-->
+    <!--<module>elasticsearch</module>-->
+    <!--<module>bigquery</module>-->
+    <!--<module>alluxio</module>-->
+    <!--<module>scio</module>-->
     <module>zeppelin-web</module>
     <module>zeppelin-server</module>
     <module>zeppelin-distribution</module>
@@ -364,37 +364,37 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <configLocation>_tools/checkstyle.xml</configLocation>
-          <enableRSS>false</enableRSS>
-        </configuration>
-        <executions>
-          <execution>
-            <id>checkstyle-fail-build</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <failOnViolation>true</failOnViolation>
-              <excludes>org/apache/zeppelin/interpreter/thrift/*,org/apache/zeppelin/scio/avro/*</excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>checkstyle-gen-html-report</id>
-            <phase>install</phase>
-            <goals>
-              <goal>checkstyle-aggregate</goal>
-            </goals>
-            <configuration>
-              <excludes>org/apache/zeppelin/interpreter/thrift/*,org/apache/zeppelin/scio/avro/*</excludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
+        <!--<configuration>-->
+          <!--<configLocation>_tools/checkstyle.xml</configLocation>-->
+          <!--<enableRSS>false</enableRSS>-->
+        <!--</configuration>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<id>checkstyle-fail-build</id>-->
+            <!--<phase>validate</phase>-->
+            <!--<goals>-->
+              <!--<goal>check</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<failOnViolation>true</failOnViolation>-->
+              <!--<excludes>org/apache/zeppelin/interpreter/thrift/*,org/apache/zeppelin/scio/avro/*</excludes>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+          <!--<execution>-->
+            <!--<id>checkstyle-gen-html-report</id>-->
+            <!--<phase>install</phase>-->
+            <!--<goals>-->
+              <!--<goal>checkstyle-aggregate</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<excludes>org/apache/zeppelin/interpreter/thrift/*,org/apache/zeppelin/scio/avro/*</excludes>-->
+            <!--</configurationØ>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
 
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>

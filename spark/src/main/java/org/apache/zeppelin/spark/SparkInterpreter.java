@@ -63,6 +63,8 @@ import org.apache.zeppelin.scheduler.Scheduler;
 import org.apache.zeppelin.scheduler.SchedulerFactory;
 import org.apache.zeppelin.spark.dep.SparkDependencyContext;
 import org.apache.zeppelin.spark.dep.SparkDependencyResolver;
+import org.insightedge.spark.context.InsightEdgeConfig;
+import org.insightedge.spark.context.InsightEdgeSparkContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,6 +128,8 @@ public class SparkInterpreter extends Interpreter {
   private Object classServer;      // classserver for scala 2.11
   private JavaSparkContext jsc;
 
+  private InsightEdgeConfig ieConfig;
+
 
   public SparkInterpreter(Properties property) {
     super(property);
@@ -149,6 +153,20 @@ public class SparkInterpreter extends Interpreter {
       }
       return sc;
     }
+  }
+
+  public InsightEdgeConfig getIeConfig() {
+    if (ieConfig == null) {
+      String spaceName = getProperty("insightedge.spaceName");
+      String locatorStr = getProperty("insightedge.locator");
+      String groupStr = getProperty("insightedge.group");
+
+      ieConfig = new InsightEdgeConfig(
+              spaceName,
+              scala.Option.apply(groupStr),
+              scala.Option.apply(locatorStr));
+    }
+    return ieConfig;
   }
 
   public JavaSparkContext getJavaSparkContext() {
@@ -275,7 +293,11 @@ public class SparkInterpreter extends Interpreter {
           sqlc = new SQLContext(getSparkContext());
         }
       } else {
-        sqlc = new SQLContext(getSparkContext());
+        SparkContext sc = getSparkContext();
+        InsightEdgeSparkContext gsSparkContext =
+                org.insightedge.spark.implicits.all$.MODULE$.insightEdgeSparkContext(sc);
+        sqlc = gsSparkContext.gridSqlContext();
+//      sqlc = new SQLContext(getSparkContext());
       }
     }
     return sqlc;
@@ -595,6 +617,9 @@ public class SparkInterpreter extends Interpreter {
     conf = new SparkConf();
     URL[] urls = getClassloaderUrls();
 
+    // set InsightEdge config
+    org.insightedge.spark.implicits.all$.MODULE$.SparkConfExtension(conf).setInsightEdgeConfig(getIeConfig());
+
     // Very nice discussion about how scala compiler handle classpath
     // https://groups.google.com/forum/#!topic/scala-user/MlVwo2xCCI0
 
@@ -860,6 +885,9 @@ public class SparkInterpreter extends Interpreter {
         binder.put("spark", sparkSession);
       }
 
+      ieConfig = getIeConfig();
+      binder.put("ieConfig", ieConfig);
+
       interpret("@transient val z = "
               + "_binder.get(\"z\").asInstanceOf[org.apache.zeppelin.spark.ZeppelinContext]");
       interpret("@transient val sc = "
@@ -875,6 +903,12 @@ public class SparkInterpreter extends Interpreter {
       }
 
       interpret("import org.apache.spark.SparkContext._");
+
+      // IE
+      interpret("import org.insightedge.spark.implicits.all._");
+      interpret("import org.insightedge.spark.context.InsightEdgeConfig");
+      interpret("@transient implicit val ieConfig = "
+              + "_binder.get(\"ieConfig\").asInstanceOf[org.insightedge.spark.context.InsightEdgeConfig]");
 
       if (importImplicit()) {
         if (Utils.isSpark2()) {

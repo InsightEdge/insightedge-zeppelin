@@ -152,5 +152,16 @@
       "language": "python",
       "editOnDblClick": false
     }
+  },
+  {
+    "group": "spark",
+    "name": "define",
+    "className": "org.apache.zeppelin.spark.CompilingInterpreter",
+    "properties": {
+    },
+    "editor": {
+      "language": "scala",
+      "editOnDblClick": false
+    }
   }
 ]

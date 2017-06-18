@@ -36,13 +36,6 @@ import java.util.Properties;
  * @author Leonid_Poliakov
  */
 public class CompilingInterpreter extends Interpreter {
-    static {
-        Interpreter.register(
-                "define",
-                "spark",
-                CompilingInterpreter.class.getName(),
-                new InterpreterPropertyBuilder().build());
-    }
 
     private DepInterpreter depInterpreter;
 

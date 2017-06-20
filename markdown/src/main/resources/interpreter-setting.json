@@ -7,7 +7,7 @@
       "markdown.parser.type": {
         "envName": "MARKDOWN_PARSER_TYPE",
         "propertyName": "markdown.parser.type",
-        "defaultValue": "pegdown",
+        "defaultValue": "markdown4j",
         "description": "Markdown Parser Type. Available values: pegdown, markdown4j. Default = pegdown"
       }
     },

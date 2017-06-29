@@ -23,7 +23,7 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>18.1.0-m1-8000-236</version>
     <relativePath>..</relativePath>
   </parent>
 

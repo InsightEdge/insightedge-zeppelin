@@ -63,7 +63,7 @@
       "insightedge.group": {
         "envName": null,
         "propertyName": "insightedge.group",
-        "defaultValue": "insightedge",
+        "defaultValue": "xap-12.2.0",
         "description": "InsightEdge DataGrid group"
       },
       "insightedge.locator": {

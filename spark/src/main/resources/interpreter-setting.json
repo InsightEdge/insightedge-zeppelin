@@ -53,24 +53,6 @@
         "propertyName": "spark.master",
         "defaultValue": "local[*]",
         "description": "Spark master uri. ex) spark://masterhost:7077"
-      },
-      "insightedge.spaceName": {
-        "envName": null,
-        "propertyName": "insightedge.spaceName",
-        "defaultValue": "insightedge-space",
-        "description": "InsightEdge DataGrid Space name"
-      },
-      "insightedge.group": {
-        "envName": null,
-        "propertyName": "insightedge.group",
-        "defaultValue": "xap-12.2.0",
-        "description": "InsightEdge DataGrid group"
-      },
-      "insightedge.locator": {
-        "envName": null,
-        "propertyName": "insightedge.locator",
-        "defaultValue": "127.0.0.1:4174",
-        "description": "InsightEdge DataGrid locator"
       }
     },
     "editor": {

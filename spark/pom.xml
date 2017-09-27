@@ -57,7 +57,7 @@
     <pyspark.test.exclude>**/PySparkInterpreterMatplotlibTest.java</pyspark.test.exclude>
     <pyspark.test.include>**/*Test.*</pyspark.test.include>
 
-    <insightedge.version>2.1.0-SNAPSHOT</insightedge.version>
+    <insightedge.version>12.3.0-SNAPSHOT</insightedge.version>
   </properties>
 
   <dependencies>

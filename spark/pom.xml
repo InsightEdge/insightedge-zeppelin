@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.0-m6</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
-  <artifactId>zeppelin-spark_2.10</artifactId>
+  <artifactId>zeppelin-spark_2.11</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>12.3.0-m6</version>
   <name>Zeppelin: Spark</name>
   <description>Zeppelin spark support</description>
 
@@ -57,7 +57,7 @@
     <pyspark.test.exclude>**/PySparkInterpreterMatplotlibTest.java</pyspark.test.exclude>
     <pyspark.test.include>**/*Test.*</pyspark.test.include>
 
-    <insightedge.version>12.3.0-SNAPSHOT</insightedge.version>
+    <insightedge.version>12.3.0-m6</insightedge.version>
   </properties>
 
   <dependencies>

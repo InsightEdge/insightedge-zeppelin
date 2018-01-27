@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.0-m17-18916-14</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
-  <artifactId>zeppelin-scalding_2.10</artifactId>
+  <artifactId>zeppelin-scalding_2.11</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>12.3.0-m17-18916-14</version>
   <name>Zeppelin: Scalding interpreter</name>
 
   <properties>

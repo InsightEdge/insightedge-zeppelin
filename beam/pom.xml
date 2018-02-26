@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.0-m21-18920-43</version>
     <relativePath>..</relativePath>
   </parent>
   
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-beam</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>12.3.0-m21-18920-43</version>
   <name>Zeppelin: Beam interpreter</name>
   
   <properties>
@@ -52,7 +52,7 @@
     
     <dependency>
       <groupId>org.apache.spark</groupId>
-      <artifactId>spark-core_2.10</artifactId>
+      <artifactId>spark-core_2.11</artifactId>
       <version>${beam.spark.version}</version>
       <exclusions>
         <exclusion>
@@ -64,15 +64,15 @@
           <groupId>io.netty</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>akka-actor_2.10</artifactId>
+          <artifactId>akka-actor_2.11</artifactId>
           <groupId>org.spark-project.akka</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>akka-remote_2.10</artifactId>
+          <artifactId>akka-remote_2.11</artifactId>
           <groupId>org.spark-project.akka</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>akka-slf4j_2.10</artifactId>
+          <artifactId>akka-slf4j_2.11</artifactId>
           <groupId>org.spark-project.akka</groupId>
         </exclusion>
       </exclusions>
@@ -80,7 +80,7 @@
   
     <dependency>
       <groupId>org.apache.spark</groupId>
-      <artifactId>spark-streaming_2.10</artifactId>
+      <artifactId>spark-streaming_2.11</artifactId>
       <version>${beam.spark.version}</version>
     </dependency>
 

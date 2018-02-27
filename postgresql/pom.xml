@@ -23,13 +23,13 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.0-m21-18920-57</version>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-postgresql</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>12.3.0-m21-18920-57</version>
   <name>Zeppelin: PostgreSQL interpreter</name>
 
   <properties>

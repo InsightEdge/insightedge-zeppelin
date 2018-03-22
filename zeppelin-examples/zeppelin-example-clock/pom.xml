@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin-examples</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.1-m1-19200-19</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-example-clock</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>12.3.1-m1-19200-19</version>
   <name>Zeppelin: Example application - Clock</name>
 
   <dependencies>

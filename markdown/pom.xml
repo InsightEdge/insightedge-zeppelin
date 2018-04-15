@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.1-m2-19201-18</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-markdown</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>12.3.1-m2-19201-18</version>
   <name>Zeppelin: Markdown interpreter</name>
 
   <properties>

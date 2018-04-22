@@ -10,6 +10,9 @@ import java.util.Map;
  */
 public interface RemoteEventClientWrapper {
 
-  public void onMetaInfosReceived(Map<String, String> infos);
+  void onMetaInfosReceived(Map<String, String> infos);
+
+  void onParaInfosReceived(String noteId, String paragraphId,
+                           Map<String, String> infos);
 
 }

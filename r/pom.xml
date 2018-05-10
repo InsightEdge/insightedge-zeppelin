@@ -23,11 +23,11 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.1-m5-19204-16</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>zeppelin-zrinterpreter_2.10</artifactId>
+  <artifactId>zeppelin-zrinterpreter_2.11</artifactId>
   <packaging>jar</packaging>
   <name>Zeppelin: R Interpreter</name>
   <description>R Interpreter for Zeppelin</description>

@@ -89,7 +89,7 @@
 
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.10</artifactId>
+      <artifactId>scalatest_${scala.binary.version}</artifactId>
       <version>${scalatest.version}</version>
       <scope>test</scope>
     </dependency>
@@ -101,8 +101,9 @@
       <dependencies>
         <dependency>
           <groupId>org.scala-lang.modules</groupId>
-          <artifactId>scala-xml_2.11</artifactId>
+          <artifactId>scala-xml_${scala.binary.version}</artifactId>
           <version>1.0.2</version>
+          <scope>provided</scope>
         </dependency>
       </dependencies>
     </profile>

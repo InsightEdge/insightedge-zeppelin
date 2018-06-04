@@ -149,21 +149,13 @@ public class SparkInterpreter extends Interpreter {
   }
 
   public InsightEdgeConfig getIeConfig() {
-//    if (ieConfig == null) {
-//      scala.Option<String> scalaNone = scala.Option.apply(null);
-//
-//      ieConfig = new InsightEdgeConfig(
-//              System.getenv("INSIGHTEDGE_SPACE_NAME"),
-//              scalaNone,
-//              scalaNone);
-      if (ieConfig == null) {
-          String locatorStr = getProperty("insightedge.locator");
-          String groupStr = getProperty("insightedge.group");
+    if (ieConfig == null) {
+      scala.Option<String> scalaNone = scala.Option.apply((String) null);
 
-          ieConfig = new InsightEdgeConfig(
-                  System.getenv("INSIGHTEDGE_SPACE_NAME"),
-                  scala.Option.apply(groupStr),
-                  scala.Option.apply(locatorStr));
+      ieConfig = new InsightEdgeConfig(
+              System.getenv("INSIGHTEDGE_SPACE_NAME"),
+              scalaNone,
+              scalaNone);
     }
     return ieConfig;
   }

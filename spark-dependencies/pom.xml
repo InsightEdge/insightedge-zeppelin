@@ -61,10 +61,10 @@
 
     <spark.archive>spark-${spark.version}</spark.archive>
     <spark.src.download.url>
-      http://d3kbcqa49mib13.cloudfront.net/${spark.archive}.tgz
+      http://apache.spd.co.il/spark/${spark.archive}/${spark.archive}-bin-hadoop2.7.tgz
     </spark.src.download.url>
     <spark.bin.download.url>
-      http://d3kbcqa49mib13.cloudfront.net/${spark.archive}-bin-without-hadoop.tgz
+      http://apache.spd.co.il/spark/${spark.archive}/${spark.archive}-bin-without-hadoop.tgz
     </spark.bin.download.url>
 
     <!--plugin versions-->

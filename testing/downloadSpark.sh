@@ -66,7 +66,11 @@ if [[ ! -d "${SPARK_HOME}" ]]; then
         echo "${SPARK_VERSION} being downloaded from archives"
         STARTTIME=`date +%s`
         #timeout -s KILL "${MAX_DOWNLOAD_TIME_SEC}" wget "http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/${SPARK_ARCHIVE}.tgz"
-        download_with_retry "http://d3kbcqa49mib13.cloudfront.net/${SPARK_ARCHIVE}.tgz"
+        if [["${SPARK_ARCHIVE}" = "spark-2.3"]]; then
+            download_with_retry "http://apache.spd.co.il/spark/${SPARK_ARCHIVE}/${SPARK_ARCHIVE}-bin-hadoop2.7.tgz"
+        else
+            download_with_retry "http://d3kbcqa49mib13.cloudfront.net/${SPARK_ARCHIVE}.tgz"
+        fi
         ENDTIME=`date +%s`
         DOWNLOADTIME="$((ENDTIME-STARTTIME))"
     fi

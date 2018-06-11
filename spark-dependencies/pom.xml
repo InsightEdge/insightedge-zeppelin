@@ -60,8 +60,9 @@
     <insightedge.version>12.3.1-SNAPSHOT</insightedge.version>
 
     <spark.archive>spark-${spark.version}</spark.archive>
+    <spark.archive.hadoop>${spark.archive}-bin-hadoop2.7</spark.archive.hadoop>
     <spark.src.download.url>
-      http://apache.spd.co.il/spark/${spark.archive}/${spark.archive}-bin-hadoop2.7.tgz
+      http://apache.spd.co.il/spark/${spark.archive}/${spark.archive.hadoop}.tgz
     </spark.src.download.url>
     <spark.bin.download.url>
       http://apache.spd.co.il/spark/${spark.archive}/${spark.archive}-bin-without-hadoop.tgz
@@ -813,9 +814,9 @@
                   <target>
                     <delete dir="../interpreter/spark/pyspark"/>
                     <copy todir="../interpreter/spark/pyspark"
-                          file="${project.build.directory}/${spark.archive}/python/lib/py4j-${py4j.version}-src.zip"/>
+                          file="${project.build.directory}/${spark.archive.hadoop}/python/lib/py4j-${py4j.version}-src.zip"/>
                     <zip destfile="${project.build.directory}/../../interpreter/spark/pyspark/pyspark.zip"
-                         basedir="${project.build.directory}/${spark.archive}/python"
+                         basedir="${project.build.directory}/${spark.archive.hadoop}/python"
                          includes="pyspark/*.py,pyspark/**/*.py"/>
                   </target>
                 </configuration>

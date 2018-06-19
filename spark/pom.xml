@@ -38,7 +38,7 @@
     <jsoup.version>1.8.2</jsoup.version>
     <spark.version>2.3.0</spark.version>
     <guava.version>14.0.1</guava.version>
-    <py4j.version>0.10.6</py4j.version>
+    <py4j.version>0.10.7</py4j.version>
     <commons.exec.version>1.3</commons.exec.version>
     <commons.compress.version>1.9</commons.compress.version>
     <maven.plugin.api.version>3.0</maven.plugin.api.version>
@@ -571,6 +571,19 @@
         <spark.version>2.3.0</spark.version>
         <protobuf.version>2.5.0</protobuf.version>
         <py4j.version>0.10.6</py4j.version>
+        <scala.version>2.11.8</scala.version>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>spark-2.3.1</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <spark.version>2.3.1</spark.version>
+        <protobuf.version>2.5.0</protobuf.version>
+        <py4j.version>0.10.7</py4j.version>
         <scala.version>2.11.8</scala.version>
       </properties>
     </profile>

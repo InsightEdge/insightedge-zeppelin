@@ -55,7 +55,7 @@
     <akka.group>org.spark-project.akka</akka.group>
     <akka.version>2.3.4-spark</akka.version>
 
-    <py4j.version>0.10.6</py4j.version>
+    <py4j.version>0.10.7</py4j.version>
 
     <insightedge.version>12.3.1-SNAPSHOT</insightedge.version>
 
@@ -477,6 +477,19 @@
         <spark.version>2.3.0</spark.version>
         <protobuf.version>2.5.0</protobuf.version>
         <py4j.version>0.10.6</py4j.version>
+        <scala.version>2.11.8</scala.version>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>spark-2.3.1</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <spark.version>2.3.1</spark.version>
+        <protobuf.version>2.5.0</protobuf.version>
+        <py4j.version>0.10.7</py4j.version>
         <scala.version>2.11.8</scala.version>
       </properties>
     </profile>

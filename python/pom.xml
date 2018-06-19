@@ -33,7 +33,7 @@
   <name>Zeppelin: Python interpreter</name>
 
   <properties>
-    <py4j.version>0.10.6</py4j.version>
+    <py4j.version>0.10.7</py4j.version>
     <python.test.exclude>
         **/PythonInterpreterWithPythonInstalledTest.java,
         **/PythonInterpreterPandasSqlTest.java,
@@ -107,7 +107,7 @@
             <phase>package</phase>
             <goals><goal>download-single</goal></goals>
             <configuration>
-              <url>https://files.pythonhosted.org/packages/ac/26/6aced3634390aa7e49bd30c647a4890095b5d22fae940b4d3fd653368c3d/</url>
+              <url>https://files.pythonhosted.org/packages/dd/03/d83f659f045d819fc7550dd472b3831fe8c8fa7204c6428270a46a4a5ab9/</url>
               <fromFile>py4j-${py4j.version}.zip</fromFile>
               <toFile>${project.build.directory}/../../interpreter/python/py4j-${py4j.version}.zip</toFile>
             </configuration>

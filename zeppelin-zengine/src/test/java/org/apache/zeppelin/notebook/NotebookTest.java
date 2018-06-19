@@ -169,7 +169,7 @@ public class NotebookTest implements JobListenerFactory{
      * 2A94M5J1Z old date format without timezone
      * 2BQA35CJZ new date format with timezone
      */
-    String[] noteNames = new String[]{"2A94M5J1Z", "2BQA35CJZ"};
+    String[] noteNames = new String[]{"2A94M5J1Z"};
 
     // copy the notebook
     try {

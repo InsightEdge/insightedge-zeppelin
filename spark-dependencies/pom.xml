@@ -57,7 +57,7 @@
 
     <py4j.version>0.10.7</py4j.version>
 
-    <insightedge.version>12.3.1-SNAPSHOT</insightedge.version>
+    <insightedge.version>13.0.0-SNAPSHOT</insightedge.version>
 
     <spark.archive>spark-${spark.version}</spark.archive>
     <spark.archive.hadoop>${spark.archive}-bin-hadoop2.7</spark.archive.hadoop>

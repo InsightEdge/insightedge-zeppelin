@@ -64,7 +64,7 @@
     <!--<module>hbase</module>-->
     <!--<module>pig</module>-->
     <!--<module>postgresql</module>-->
-    <!--<module>jdbc</module>-->
+    <module>jdbc</module>
     <!--<module>file</module>-->
     <!--<module>flink</module>-->
     <!--<module>ignite</module>-->

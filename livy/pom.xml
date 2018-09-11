@@ -24,14 +24,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>14.0.0-m12-19911-8</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
   <artifactId>zeppelin-livy</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>14.0.0-m12-19911-8</version>
   <name>Zeppelin: Livy interpreter</name>
 
   <properties>

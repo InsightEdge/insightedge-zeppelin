@@ -23,14 +23,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>14.0.0-m12-19911-46</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
-  <artifactId>zeppelin-spark-dependencies_2.10</artifactId>
+  <artifactId>zeppelin-spark-dependencies_2.11</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>14.0.0-m12-19911-46</version>
   <name>Zeppelin: Spark dependencies</name>
   <description>Zeppelin spark support</description>
 
@@ -57,7 +57,7 @@
 
     <py4j.version>0.10.7</py4j.version>
 
-    <insightedge.version>14.0.0-SNAPSHOT</insightedge.version>
+    <insightedge.version>14.0.0-m12-19911-46</insightedge.version>
 
     <spark.archive>spark-${spark.version}</spark.archive>
     <spark.archive.hadoop>${spark.archive}-bin-hadoop2.7</spark.archive.hadoop>

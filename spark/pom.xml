@@ -22,14 +22,14 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>14.0.0-m12-19911-143</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>org.apache.zeppelin</groupId>
-  <artifactId>zeppelin-spark_2.10</artifactId>
+  <artifactId>zeppelin-spark_2.11</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>14.0.0-m12-19911-143</version>
   <name>Zeppelin: Spark</name>
   <description>Zeppelin spark support</description>
 
@@ -66,7 +66,7 @@
       ttp://apache.spd.co.il/spark/${spark.archive}/${spark.archive}-bin-without-hadoop.tgz
     </spark.bin.download.url>
 
-    <insightedge.version>14.0.0-SNAPSHOT</insightedge.version>
+    <insightedge.version>14.0.0-m12-19911-143</insightedge.version>
   </properties>
 
   <dependencies>

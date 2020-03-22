@@ -22,13 +22,13 @@
   <parent>
     <artifactId>zeppelin</artifactId>
     <groupId>org.apache.zeppelin</groupId>
-    <version>0.7.2</version>
+    <version>12.3.0-19025</version>
     <relativePath>..</relativePath>
   </parent>
 
   <artifactId>zeppelin-elasticsearch</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.2</version>
+  <version>12.3.0-19025</version>
   <name>Zeppelin: Elasticsearch interpreter</name>
 
   <properties>
